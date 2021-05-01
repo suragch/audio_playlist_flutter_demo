@@ -16,7 +16,6 @@ class PageManager {
   final isShuffleModeEnabledNotifier = ValueNotifier<bool>(false);
 
   late AudioPlayer _audioPlayer;
-  late ConcatenatingAudioSource _playlist;
 
   PageManager() {
     _init();
@@ -32,17 +31,10 @@ class PageManager {
     _listenForChangesInSequenceState();
   }
 
+  // TODO: set playlist
   void _setInitialPlaylist() async {
-    const prefix = 'https://www.soundhelix.com/examples/mp3';
-    final song1 = Uri.parse('$prefix/SoundHelix-Song-1.mp3');
-    final song2 = Uri.parse('$prefix/SoundHelix-Song-2.mp3');
-    final song3 = Uri.parse('$prefix/SoundHelix-Song-3.mp3');
-    _playlist = ConcatenatingAudioSource(children: [
-      AudioSource.uri(song1, tag: 'Song 1'),
-      AudioSource.uri(song2, tag: 'Song 2'),
-      AudioSource.uri(song3, tag: 'Song 3'),
-    ]);
-    await _audioPlayer.setAudioSource(_playlist);
+    const url = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';    
+    await _audioPlayer.setUrl(url);
   }
 
   void _listenForChangesInPlayerState() {
@@ -97,31 +89,7 @@ class PageManager {
   }
 
   void _listenForChangesInSequenceState() {
-    _audioPlayer.sequenceStateStream.listen((sequenceState) {
-      if (sequenceState == null) return;
-
-      // update current song title
-      final currentItem = sequenceState.currentSource;
-      final title = currentItem?.tag as String?;
-      currentSongTitleNotifier.value = title ?? '';
-
-      // update playlist
-      final playlist = sequenceState.effectiveSequence;
-      final titles = playlist.map((item) => item.tag as String).toList();
-      playlistNotifier.value = titles;
-
-      // update shuffle mode
-      isShuffleModeEnabledNotifier.value = sequenceState.shuffleModeEnabled;
-
-      // update previous and next buttons
-      if (playlist.isEmpty || currentItem == null) {
-        isFirstSongNotifier.value = true;
-        isLastSongNotifier.value = true;
-      } else {
-        isFirstSongNotifier.value = playlist.first == currentItem;
-        isLastSongNotifier.value = playlist.last == currentItem;
-      }
-    });
+    // TODO
   }
 
   void play() async {
@@ -141,45 +109,26 @@ class PageManager {
   }
 
   void onRepeatButtonPressed() {
-    repeatButtonNotifier.nextState();
-    switch (repeatButtonNotifier.value) {
-      case RepeatState.off:
-        _audioPlayer.setLoopMode(LoopMode.off);
-        break;
-      case RepeatState.repeatSong:
-        _audioPlayer.setLoopMode(LoopMode.one);
-        break;
-      case RepeatState.repeatPlaylist:
-        _audioPlayer.setLoopMode(LoopMode.all);
-    }
+    // TODO
   }
 
   void onPreviousSongButtonPressed() {
-    _audioPlayer.seekToPrevious();
+    // TODO
   }
 
   void onNextSongButtonPressed() {
-    _audioPlayer.seekToNext();
+    // TODO
   }
 
   void onShuffleButtonPressed() async {
-    final enable = !_audioPlayer.shuffleModeEnabled;
-    if (enable) {
-      await _audioPlayer.shuffle();
-    }
-    await _audioPlayer.setShuffleModeEnabled(enable);
+    // TODO
   }
 
   void addSong() {
-    final songNumber = _playlist.length + 1;
-    const prefix = 'https://www.soundhelix.com/examples/mp3';
-    final song = Uri.parse('$prefix/SoundHelix-Song-$songNumber.mp3');
-    _playlist.add(AudioSource.uri(song, tag: 'Song $songNumber'));
+    // TODO
   }
 
   void removeSong() {
-    final index = _playlist.length - 1;
-    if (index < 0) return;
-    _playlist.removeAt(index);
+    // TODO
   }
 }
