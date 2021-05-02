@@ -33,7 +33,7 @@ class PageManager {
 
   // TODO: set playlist
   void _setInitialPlaylist() async {
-    const url = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';    
+    const url = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3';    
     await _audioPlayer.setUrl(url);
   }
 
